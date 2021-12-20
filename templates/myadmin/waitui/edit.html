@@ -1,0 +1,117 @@
+{% extends "myadmin/base.html" %}
+
+
+{% block main_body %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        外推人员管理
+        <small>外推系统后台管理</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li class="active">外推人员管理</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content container-fluid">
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+                <h2 class="box-title"> <span class="glyphicon glyphicon-calendar" aria-hidden="true">编辑人员信息</h2>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form class="form-horizontal" action="{% url 'myadmin_waitui_update' chengdu.id %}" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="box-body">z
+                <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">3天回访：</label>
+                  <div class="col-sm-4">
+                    <input type="text" name="threedays" value="{{ chengdu.threedays }}" class="form-control" id="inputText3" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">3天是否在职：</label>
+                  <div class="col-sm-4">
+                    <input type="text" name="threeonjob" value="{{ chengdu.threeonjob }}" class="form-control" id="inputText3" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">7天回访：</label>
+                  <div class="col-sm-4">
+                    <input type="text" name="sevendays" value="{{ chengdu.sevendays }}" class="form-control" id="inputText3" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">7天是否在职：</label>
+                  <div class="col-sm-4">
+                    <input type="text" name="sevenonjob" value="{{ chengdu.sevenonjob }}" class="form-control" id="inputText3" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">15天回访：</label>
+                  <div class="col-sm-4">
+                    <input type="text" name="fifitydays" value="{{ chengdu.fifitydays }}" class="form-control" id="inputText3" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">15天是否在职：</label>
+                  <div class="col-sm-4">
+                    <input type="text" name="fifityonjob" value="{{ chengdu.fifityonjob }}" class="form-control" id="inputText3" />
+                  </div>
+                </div>
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button type="submit" class="btn btn-primary">保存</button> &nbsp; 
+                  <button type="reset" class="btn btn-default">重置</button>
+                <div class="col-sm-offset-2 col-sm-10">
+              </div>
+              <!-- /.box-footer -->
+            </form>
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>
+
+    </section>
+    <!-- /.content -->
+{% endblock %}
+
+
+{% block loadjavascript %}
+<script type="text/javascript">
+
+  //自定义函数，实现通过店铺id，Ajax加载对应的菜品分类信息
+  function doLoadCategory(cid){
+    //获取选中的id号
+    var id = $("#shop_id").val();
+    $("#category_id").empty();
+    $.ajax({
+        url: "/myadmin/category/load/"+id,
+        type: 'get',
+        data: {},
+        dataType:'json',
+        success:function(res){
+            if(res.data.length<1)
+                return;
+            var data = res.data;
+            var select = $("#category_id")
+            for(var i=0;i<data.length;i++){
+                $('<option value="'+data[i].id+'">'+data[i].name+'</option>').appendTo(select)
+                //select.append('<option value="'+data[i].id+'">'+data[i].name+'</option>'); 
+            }
+            select.find("option[value='"+cid+"']").attr("selected",true);
+
+        }
+    });
+
+  }
+  doLoadCategory({{product.category_id}});
+</script>
+{% endblock %}
